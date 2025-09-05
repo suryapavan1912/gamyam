@@ -70,10 +70,6 @@ export default function Home() {
         fetchProducts();
     }, [fetchProducts]);
 
-    const handleSearch = (search: string) => {
-        setSearch(search);
-    }
-
     const handlePageChange = (page: number) => {
         router.push(`/?page=${page}${searchText ? `&text=${searchText}` : ""}`);
     }
@@ -93,7 +89,7 @@ export default function Home() {
     return (
         <div className="flex flex-col gap-4 p-8">
             <HeaderComponent view={view} setView={setView} />
-            <SearchComponent search={search} handleSearch={handleSearch} />
+            <SearchComponent search={search} setSearch={setSearch} />
 
             <div className="flex flex-col gap-4 border-2 border-zinc-200 rounded-md p-8 overflow-x-auto">
                 {view === "list" ? (

@@ -59,8 +59,8 @@ const ProductList = ({ products, loading, handleEdit }: ProductListProps) => {
                     </div>
 
                     <div className="w-10 flex-shrink-0">
-                        <Button variant="outline" size="icon" className="hover:bg-zinc-100 cursor-pointer">
-                            <EditIcon className="w-4 h-4" onClick={() => handleEdit(product.id)} />
+                        <Button variant="outline" size="icon" className="hover:bg-zinc-100 cursor-pointer" onClick={() => handleEdit(product.id)}>
+                            <EditIcon className="w-4 h-4" />
                         </Button>
                     </div>
                 </div>
