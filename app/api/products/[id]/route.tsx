@@ -3,9 +3,9 @@ import products from "@/db/products.json" with { type: "json" };
 import path from "path";
 import fs from "fs";
 
-export async function GET (request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET (request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const product = products.find((product) => product.id === Number(id));
         return NextResponse.json(product);
     } catch (error) {
@@ -14,9 +14,9 @@ export async function GET (request: NextRequest, { params }: { params: { id: str
     }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const { id: productId } = params;
+        const { id: productId } = await params;
         const details = await request.json();
         const productIndex = products.findIndex((product) => product.id === Number(productId));
         if (productIndex === -1) return NextResponse.json({error: "Product not found"}, {status: 404});

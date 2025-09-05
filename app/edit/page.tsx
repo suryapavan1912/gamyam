@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -19,9 +19,7 @@ const productSchema = z.object({
 
 export type ProductFormData = z.infer<typeof productSchema>;
 
-const EditPage = () => {
-    const searchParams = useSearchParams();
-    const id = searchParams.get("id") || "";
+function EditPageContainer({ id }: { id: string | null }) {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     
@@ -104,4 +102,17 @@ const EditPage = () => {
     );
 }
 
-export default EditPage;
+function EditPage() {
+    const searchParams = useSearchParams();
+    const id = searchParams.get("id");
+    
+    return <EditPageContainer id={id || null} />
+}
+
+export default function Edit() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <EditPage />
+        </Suspense>
+    )
+}

@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef, Suspense } from "react";
 import { toast } from "sonner";
 import ProductList from "@/components/products-list";
 import ProductGrid from "@/components/products-grid";
@@ -32,12 +32,7 @@ export interface Pagination {
     previousPage: number | null;
 }
 
-export default function Home() {
-
-    const searchParams = useSearchParams();
-    const page : number = parseInt(searchParams.get("page") || "1");
-    const limit : number = parseInt(searchParams.get("limit") || "10");
-    const searchText : string = searchParams.get("text") || "";
+function HomePageContainer({ page, limit, searchText }: { page: number, limit: number, searchText: string }) {
 
     const [products, setProducts] = useState<Product[]>([]);
     const [pagination, setPagination] = useState<Pagination>({ page: 1, total: 0, totalPages: 0, hasNextPage: false, hasPreviousPage: false, nextPage: null, previousPage: null });
@@ -111,5 +106,22 @@ export default function Home() {
 
             <PaginationComponent pagination={pagination} handlePageChange={handlePageChange} />
         </div>
+    )
+}
+
+function HomePage() {
+    const searchParams = useSearchParams();
+    const page : number = parseInt(searchParams.get("page") || "1");
+    const limit : number = parseInt(searchParams.get("limit") || "10");
+    const searchText : string = searchParams.get("text") || "";
+
+    return <HomePageContainer page={page} limit={limit} searchText={searchText} />
+}
+
+export default function Home() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}> 
+            <HomePage />
+        </Suspense>
     )
 }
