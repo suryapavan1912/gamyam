@@ -1,14 +1,26 @@
 import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
 
 interface SearchComponentProps {
     search: string;
-    setSearch: (search: string) => void;
+    handleSetSearch: (search: string) => void;
 }
 
-const SearchComponent = ({ search, setSearch }: SearchComponentProps) => {
+const SearchComponent = ({ search, handleSetSearch }: SearchComponentProps) => {
+    const [localSearch, setLocalSearch] = useState(search);
+
+    useEffect(() => {
+        setLocalSearch(search);
+    }, [search]);
+
+    const handleInputChange = (value: string) => {
+        setLocalSearch(value);
+        handleSetSearch(value);
+    };
+
     return (
         <div className="flex items-center gap-2">
-            <Input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
+            <Input type="text" placeholder="Search" value={localSearch} onChange={(e) => handleInputChange(e.target.value)} />
         </div>
     )
 }
